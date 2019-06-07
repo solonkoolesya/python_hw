@@ -8,7 +8,7 @@
 # Если написанный вами код не содержит синтаксических ошибок,
 # вы увидите результаты тестов ваших решений.
 
-
+import functools
 def fac(n):
     """
     Факториал
@@ -19,7 +19,7 @@ def fac(n):
 
     Функция должна вернуть факториал аргумента, числа n.
     """
-    pass
+    return functools.reduce(lambda x, y: x*y,range(1, n+1))
 
 
 def gcd(a, b):
@@ -35,7 +35,9 @@ def gcd(a, b):
 
     (mod - операция взятия остатка от деления, в python - оператор '%')
     """
-    pass
+    if b == 0:
+      return a
+    return(gcd(b, a % b))
 
 
 def fib():
@@ -52,8 +54,13 @@ def fib():
       ..
 
     """
-    pass
-
+    a = [1, 1]
+    while True:
+        a.append(a[-1]+a[-2])
+        if len(a) == 40:
+          break
+    return a
+	
 
 def flatten(seq):
     """
@@ -69,4 +76,7 @@ def flatten(seq):
     >>> flatten([(1, 2), (3, 4)])
     [1, 2, 3, 4]
     """
-    pass
+    a = []
+    for i in seq:
+        [a.append(x) for x in list(seq)]
+    return a
