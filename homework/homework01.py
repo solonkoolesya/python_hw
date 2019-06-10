@@ -76,7 +76,10 @@ def flatten(seq):
     >>> flatten([(1, 2), (3, 4)])
     [1, 2, 3, 4]
     """
-    a = []
+    b = []
     for i in seq:
-        [a.append(x) for x in list(seq)]
-    return a
+        try:
+            b.append(abs(i))
+        except:
+            b += flatten(i)
+    return(b)
