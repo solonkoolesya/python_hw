@@ -61,7 +61,7 @@ def fib():
           break
     return a
 	
-
+from collections.abc import Sequence
 def flatten(seq):
     """
     Функция, преобразующая вложенные последовательности любого уровня
@@ -79,7 +79,8 @@ def flatten(seq):
     b = []
     for i in seq:
         try:
-            b.append(abs(i))
-        except:
+            isinstance(i, Sequence)
             b += flatten(i)
+        except:
+            b.append(i)
     return(b)
