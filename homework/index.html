@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>URL shortener</title>
+  </head>
+  <body>
+    <form action="" method="post">
+	  <label for="url">URL: </label>
+	  <input id="url" type="text" name="url">
+      {% csrf_token %}
+      <input type="submit" value="OK">
+    </form>
+	{% block content %}
+       <h3><a href={{ url_out }}>{{ url_out }}</a></h3>
+       <h3>{{ err_out }}</h3>
+	   <h3>{{ key }} {{ stat }}</h3>
+    {% endblock %}
+
+  </body>
+</html>
