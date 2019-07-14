@@ -41,6 +41,7 @@ Keys must be strings and appear in sorted order (sorted as raw strings, not alph
 OrderedDict([(b'cow', b'moo'), (b'spam', b'eggs')])
 
 """
+import re
 def encode(val):
   if type(val) is bytes:
     return str.encode(str(len(val)))+b':'+val
@@ -77,7 +78,24 @@ def encode(val):
 
   
 def decode(val):
-    return (val[1:-1].decode("utf-8"))
+    dec_val = val.decode("utf-8")
+    if re.match(r"^\d+:[a-z]*", dec_val):
+      if len(dec_val.split(':')[1]) != int(dec_val.split(':')[0]):
+        raise ValueError('Incorrect encoded value!')
+      else:
+        return dec_val.split(':')[1]
+    
+    elif re.match(r"^i-?\d+e$", dec_val):
+      if len(dec_val[1:-1]) > 1 and dec_val[1:-1].startswith('0'):
+        raise ValueError('Incorrect encoded value!')
+      else:       
+        return dec_val[1:-1]
+    
+    if re.match(r"^l.*e$", dec_val):
+      pass
+    if re.match(r"^d.*e$", dec_val):
+      pass
+
 	
 if __name__ == '__main__':
     import doctest
