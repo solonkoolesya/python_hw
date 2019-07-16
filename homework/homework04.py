@@ -75,9 +75,40 @@ def encode(val):
         raise ValueError('invalid type for dict key, not bytes: {}'.format(type(key)))
     return(b'd'+res+b'e')
 
-  
+
 def decode(val):
-    return (val[1:-1].decode("utf-8"))
+    re_str = re.match(r"^(\d+):(\w*)", val)
+    re_int = re.match(r"^i(-?\d+)e", val)
+    re_list = re.match(r"^l(.*)e", val)
+    re_dict = re.match(r"^d(.*)e", val)
+
+    if re_str:
+        return val.split(':')[1][:int(re_str.group(1))], val[int(re_str.group(1))+2:]
+
+    if re_int:
+        return re_int.group(1), val[re_int.span()[1]:]
+
+    if re_list:
+        res = []
+        list = re_list.group(1)
+        while list:
+            a, b = decode(list)
+            res.append(a)
+            list = b
+        return res, val[re_list.span()[1]:]
+
+    if re_dict:
+        res = {}
+        content = re_dict.group(1)
+        while content:
+            if content[0].isdigit():
+                a1, b1 = decode(content)
+                res.update({a1: None})
+                a2, b2 = decode(b1)
+                res[a1] = a2
+                content = b2
+        return res, val[re_dict.span()[1]:]
+        
 	
 if __name__ == '__main__':
     import doctest
